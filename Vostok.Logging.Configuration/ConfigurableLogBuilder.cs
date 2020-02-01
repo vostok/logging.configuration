@@ -26,7 +26,7 @@ namespace Vostok.Logging.Configuration
         [NotNull]
         public ConfigurableLogBuilder AddLog([NotNull] string name, [NotNull] ILog log)
         {
-            baseLogs[name] = log ?? throw new ArgumentNullException(nameof(log));
+            baseLogs[name ?? throw new ArgumentNullException(nameof(name))] = log ?? throw new ArgumentNullException(nameof(log));
             return this;
         }
 
