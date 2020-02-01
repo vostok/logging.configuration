@@ -16,19 +16,20 @@ namespace Vostok.Logging.Configuration
     [PublicAPI]
     public class ConfigurableLog : ILog, IDisposable, IObserver<LogConfigurationRule[]>
     {
-        private readonly IReadOnlyDictionary<string, ILog> baseLogs;
         private readonly IObservable<LogConfigurationRule[]> rulesSource;
         private readonly IDisposable rulesSubscription;
         private volatile ILog currentLog;
 
         internal ConfigurableLog(IReadOnlyDictionary<string, ILog> baseLogs, IObservable<LogConfigurationRule[]> rulesSource)
         {
-            this.baseLogs = baseLogs;
             this.rulesSource = rulesSource;
-
+            BaseLogs = baseLogs;
+            
             currentLog = BuildInternalLog(null);
             rulesSubscription = rulesSource.Subscribe(this);
         }
+
+        public IReadOnlyDictionary<string, ILog> BaseLogs { get; }
 
         public void Dispose()
         {
@@ -58,7 +59,7 @@ namespace Vostok.Logging.Configuration
 
         private ILog BuildInternalLog([CanBeNull] LogConfigurationRule[] rules)
         {
-            var components = baseLogs.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
+            var components = BaseLogs.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
 
             foreach (var rule in SelectRulesWithLogScope(rules))
             {
