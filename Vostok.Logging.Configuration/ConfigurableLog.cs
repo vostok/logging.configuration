@@ -17,18 +17,23 @@ namespace Vostok.Logging.Configuration
     public class ConfigurableLog : ILog, IDisposable, IObserver<LogConfigurationRule[]>
     {
         private readonly IReadOnlyDictionary<string, ILog> baseLogs;
+        private readonly IObservable<LogConfigurationRule[]> rulesSource;
         private readonly IDisposable rulesSubscription;
         private volatile ILog currentLog;
 
-        internal ConfigurableLog(IReadOnlyDictionary<string, ILog> baseLogs, IObservable<LogConfigurationRule[]> rulesProvider)
+        internal ConfigurableLog(IReadOnlyDictionary<string, ILog> baseLogs, IObservable<LogConfigurationRule[]> rulesSource)
         {
             this.baseLogs = baseLogs;
+            this.rulesSource = rulesSource;
 
-            rulesSubscription = rulesProvider.Subscribe(this);
+            rulesSubscription = rulesSource.Subscribe(this);
         }
 
         public void Dispose()
-            => rulesSubscription.Dispose();
+        {
+            rulesSubscription.Dispose();
+            (rulesSource as IDisposable)?.Dispose();
+        }
 
         public void Log(LogEvent @event)
             => currentLog.Log(@event);

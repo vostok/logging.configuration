@@ -27,4 +27,9 @@
       <HintPath>..\..\vostok.logging.abstractions\Vostok.Logging.Abstractions\bin\Release\netstandard2.0\Vostok.Logging.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\vostok.commons.helpers\Vostok.Commons.Helpers\Observable\CachingObservable.cs" Link="Commons\CachingObservable.cs" />
+    <Compile Include="..\..\vostok.commons.time\Vostok.Commons.Time\PeriodicalAction.cs" Link="Commons\PeriodicalAction.cs" />
+    <Compile Include="..\..\vostok.commons.time\Vostok.Commons.Time\TimeBudget.cs" Link="Commons\TimeBudget.cs" />
+  </ItemGroup>
 </Project>
