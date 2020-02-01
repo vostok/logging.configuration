@@ -26,6 +26,7 @@ namespace Vostok.Logging.Configuration
             this.baseLogs = baseLogs;
             this.rulesSource = rulesSource;
 
+            currentLog = BuildInternalLog(null);
             rulesSubscription = rulesSource.Subscribe(this);
         }
 
