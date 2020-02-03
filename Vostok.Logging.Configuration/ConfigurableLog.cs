@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Vostok.Logging.Abstractions;
 
@@ -18,13 +19,15 @@ namespace Vostok.Logging.Configuration
     {
         private readonly IObservable<LogConfigurationRule[]> rulesSource;
         private readonly IDisposable rulesSubscription;
+        private readonly TaskCompletionSource<bool> initSignal;
         private volatile ILog currentLog;
 
         internal ConfigurableLog(IReadOnlyDictionary<string, ILog> baseLogs, IObservable<LogConfigurationRule[]> rulesSource)
         {
             this.rulesSource = rulesSource;
-            BaseLogs = baseLogs;
             
+            initSignal = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            BaseLogs = baseLogs;
             currentLog = BuildInternalLog(null);
             rulesSubscription = rulesSource.Subscribe(this);
         }
@@ -47,7 +50,13 @@ namespace Vostok.Logging.Configuration
             => currentLog.ForContext(context);
 
         public void OnNext(LogConfigurationRule[] rules)
-            => currentLog = BuildInternalLog(rules);
+        {
+            currentLog = BuildInternalLog(rules);
+            initSignal.TrySetResult(true);
+        }
+
+        public bool WaitForRulesInitialization(TimeSpan timeout)
+            => initSignal.Task.Wait(timeout);
 
         public void OnCompleted()
         {
