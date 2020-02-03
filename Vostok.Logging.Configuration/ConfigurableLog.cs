@@ -14,7 +14,7 @@ namespace Vostok.Logging.Configuration
     /// <summary>
     /// <para><see cref="ConfigurableLog"/> is essentially a dynamic <see cref="CompositeLog"/> with named components and external configuration.</para>
     /// <para>It allows to supply a set of <see cref="LogConfigurationRule"/>s from application configuration to adjust filtering/enrichment without application restart and code changes.</para>
-    /// <para>Use <see cref="ConfigurableLogBuilder"/> to create instance of <see cref="ConfigurableLog"/>.</para>
+    /// <para>Use <see cref="ConfigurableLogBuilder"/> to create an instance of <see cref="ConfigurableLog"/>.</para>
     /// </summary>
     [PublicAPI]
     public class ConfigurableLog : ILog, IDisposable, IObserver<LogConfigurationRule[]>
