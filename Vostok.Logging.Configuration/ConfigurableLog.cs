@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Vostok.Logging.Abstractions;
+using Vostok.Logging.Abstractions.Wrappers;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
@@ -47,7 +48,7 @@ namespace Vostok.Logging.Configuration
             => currentLog.IsEnabledFor(level);
 
         public ILog ForContext(string context)
-            => currentLog.ForContext(context);
+            => new SourceContextWrapper(this, context ?? throw new ArgumentNullException(nameof(context)));
 
         public void OnNext(LogConfigurationRule[] rules)
         {
