@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Abstractions.Wrappers;
+using Vostok.Logging.Configuration.Helpers;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
@@ -107,17 +108,7 @@ namespace Vostok.Logging.Configuration
                 if (rule.MinimumLevel.HasValue)
                     log = log.WithMinimumLevel(rule.MinimumLevel.Value);
             }
-            else
-            {
-                if (!rule.Enabled)
-                    return log.WithEventsDroppedBySourceContext(rule.Source);
-
-                if (rule.Properties?.Count > 0)
-                    log = log.EnrichBySourceContext(rule.Source, l => EnrichWithProperties(l, rule.Properties));
-
-                if (rule.MinimumLevel.HasValue)
-                    log = log.WithMinimumLevelForSourceContext(rule.Source, rule.MinimumLevel.Value);
-            }
+            else log = new SourceContextFilteringLog(log, rule);
 
             return log;
         }
