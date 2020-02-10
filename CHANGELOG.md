@@ -1,3 +1,7 @@
+## 1.0.3 (10.02.2020):
+
+Implemented filtering by operation context values.
+
 ## 1.0.2 (03.02.2020):
 
 - ConfigurableLog: allow to wait for initial rules initialization.

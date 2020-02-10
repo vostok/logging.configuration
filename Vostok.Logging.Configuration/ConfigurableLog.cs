@@ -97,7 +97,10 @@ namespace Vostok.Logging.Configuration
         [NotNull]
         private static ILog ConfigureLog([NotNull] ILog log, [NotNull] LogConfigurationRule rule)
         {
-            if (string.IsNullOrEmpty(rule.Source))
+            var hasNoSource = string.IsNullOrEmpty(rule.Source);
+            var hasNoOperation = string.IsNullOrEmpty(rule.Operation);
+
+            if (hasNoSource && hasNoOperation)
             {
                 if (!rule.Enabled)
                     return new SilentLog();
@@ -108,7 +111,7 @@ namespace Vostok.Logging.Configuration
                 if (rule.MinimumLevel.HasValue)
                     log = log.WithMinimumLevel(rule.MinimumLevel.Value);
             }
-            else log = new SourceContextFilteringLog(log, rule);
+            else log = new ContextFilteringLog(log, rule);
 
             return log;
         }
