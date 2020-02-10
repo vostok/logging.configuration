@@ -28,6 +28,12 @@ namespace Vostok.Logging.Configuration
         public string Source { get; set; }
 
         /// <summary>
+        /// If set to some value, limits the scope of this rule to the operation context with such value prefix.
+        /// </summary>
+        [CanBeNull]
+        public string Operation { get; set; }
+
+        /// <summary>
         /// If set to some value, limits the minimum level of log entries in the scope of this rule.
         /// </summary>
         [CanBeNull]

@@ -7,18 +7,15 @@ using Vostok.Logging.Abstractions.Values;
 
 namespace Vostok.Logging.Configuration.Helpers
 {
-    internal class SourceContextFilteringLog : ILog
+    internal class ContextFilteringLog : ILog
     {
         private readonly ILog log;
         private readonly LogConfigurationRule rule;
 
-        public SourceContextFilteringLog(ILog log, LogConfigurationRule rule)
+        public ContextFilteringLog(ILog log, LogConfigurationRule rule)
         {
             this.log = log;
             this.rule = rule;
-
-            if (rule.Source == null)
-                throw new ArgumentNullException(nameof(rule.Source));
         }
 
         public void Log(LogEvent @event)
@@ -26,7 +23,7 @@ namespace Vostok.Logging.Configuration.Helpers
             if (@event == null)
                 return;
 
-            if (HasMatchingSourceContext(@event))
+            if (HasMatchingSourceContext(@event) && HasMatchingOperationContext(@event))
             {
                 if (!rule.Enabled)
                     return;
@@ -50,6 +47,9 @@ namespace Vostok.Logging.Configuration.Helpers
 
         private bool HasMatchingSourceContext(LogEvent @event)
         {
+            if (string.IsNullOrEmpty(rule.Source))
+                return true;
+
             if (@event?.Properties == null)
                 return false;
 
@@ -60,6 +60,23 @@ namespace Vostok.Logging.Configuration.Helpers
                 return false;
 
             return sourceContext.Any(value => value.StartsWith(rule.Source, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool HasMatchingOperationContext(LogEvent @event)
+        {
+            if (string.IsNullOrEmpty(rule.Operation))
+                return true;
+
+            if (@event?.Properties == null)
+                return false;
+
+            if (!@event.Properties.TryGetValue(WellKnownProperties.OperationContext, out var operationContextValue))
+                return false;
+
+            if (!(operationContextValue is OperationContextValue operationContext))
+                return false;
+
+            return operationContext.Any(value => value.StartsWith(rule.Operation, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
