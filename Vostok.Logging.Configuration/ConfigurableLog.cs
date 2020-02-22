@@ -27,7 +27,7 @@ namespace Vostok.Logging.Configuration
         internal ConfigurableLog(IReadOnlyDictionary<string, ILog> baseLogs, IObservable<LogConfigurationRule[]> rulesSource)
         {
             this.rulesSource = rulesSource;
-            
+
             initSignal = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             BaseLogs = baseLogs;
             currentLog = BuildInternalLog(null);
@@ -68,56 +68,28 @@ namespace Vostok.Logging.Configuration
         {
         }
 
-        private ILog BuildInternalLog([CanBeNull] LogConfigurationRule[] rules)
+        private ILog BuildInternalLog([CanBeNull] IEnumerable<LogConfigurationRule> rules)
         {
-            var components = BaseLogs.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
+            rules = (rules ?? Enumerable.Empty<LogConfigurationRule>()).Where(rule => rule != null);
 
-            foreach (var rule in SelectRulesWithLogScope(rules))
-            {
-                if (components.TryGetValue(rule.Log, out var log))
-                    components[rule.Log] = ConfigureLog(log, rule);
-            }
+            var components = BaseLogs.Select(
+                    pair =>
+                    {
+                        var rulesForLog = rules.Where(rule => rule.HasLogScope && pair.Key.StartsWith(rule.Log, StringComparison.OrdinalIgnoreCase));
+                        if (rulesForLog.Any())
+                            return new RuleBasedLog(pair.Value, rulesForLog);
 
-            var compositeLog = new CompositeLog(components.Values.ToArray()) as ILog;
+                        return pair.Value;
+                    })
+                .ToArray();
 
-            foreach (var rule in SelectRulesWithoutLogScope(rules))
-                compositeLog = ConfigureLog(compositeLog, rule);
+            var compositeLog = new CompositeLog(components);
+
+            var commonRules = rules.Where(rule => !rule.HasLogScope).ToArray();
+            if (commonRules.Any())
+                return new RuleBasedLog(compositeLog, commonRules);
 
             return compositeLog;
         }
-
-        [NotNull]
-        private static IEnumerable<LogConfigurationRule> SelectRulesWithLogScope([CanBeNull] LogConfigurationRule[] rules)
-            => (rules ?? Enumerable.Empty<LogConfigurationRule>()).Where(rule => !string.IsNullOrEmpty(rule?.Log));
-
-        [NotNull]
-        private static IEnumerable<LogConfigurationRule> SelectRulesWithoutLogScope([CanBeNull] LogConfigurationRule[] rules)
-            => (rules ?? Enumerable.Empty<LogConfigurationRule>()).Where(rule => rule != null && string.IsNullOrEmpty(rule.Log));
-
-        [NotNull]
-        private static ILog ConfigureLog([NotNull] ILog log, [NotNull] LogConfigurationRule rule)
-        {
-            var hasNoSource = string.IsNullOrEmpty(rule.Source);
-            var hasNoOperation = string.IsNullOrEmpty(rule.Operation);
-
-            if (hasNoSource && hasNoOperation)
-            {
-                if (!rule.Enabled)
-                    return new SilentLog();
-
-                if (rule.Properties?.Count > 0)
-                    log = EnrichWithProperties(log, rule.Properties);
-
-                if (rule.MinimumLevel.HasValue)
-                    log = log.WithMinimumLevel(rule.MinimumLevel.Value);
-            }
-            else log = new ContextFilteringLog(log, rule);
-
-            return log;
-        }
-
-        [NotNull]
-        private static ILog EnrichWithProperties([NotNull] ILog log, [NotNull] IReadOnlyDictionary<string, string> properties)
-            => log.WithProperties(properties.ToDictionary(pair => pair.Key, pair => pair.Value as object));
     }
 }

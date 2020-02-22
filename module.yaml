@@ -16,6 +16,8 @@ notests *default:
     - vostok.logging.abstractions
 
 full-build > notests:
+  deps:
+    - vostok.logging.context
   build:
     target: Vostok.Logging.Configuration.sln
     configuration: Release

@@ -1,3 +1,7 @@
+## 1.0.4 (22.02.2020):
+
+Implemented https://github.com/vostok/logging.configuration/issues/1
+
 ## 1.0.3 (10.02.2020):
 
 Implemented filtering by operation context values.
