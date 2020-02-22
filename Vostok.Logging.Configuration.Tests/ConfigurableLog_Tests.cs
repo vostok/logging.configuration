@@ -26,6 +26,15 @@ namespace Vostok.Logging.Configuration.Tests
                 .AddLog("Log3", log3);
         }
 
+        [Test]
+        public void Should_work_without_any_rules()
+        {
+            builder.Build().Info("Hello!");
+
+            log1.Events.Should().HaveCount(1);
+            log2.Events.Should().HaveCount(1);
+            log3.Events.Should().HaveCount(1);
+        }
 
         [Test]
         public void Should_support_routing_by_source_context()
