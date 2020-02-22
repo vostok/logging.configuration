@@ -44,5 +44,13 @@ namespace Vostok.Logging.Configuration
         /// </summary>
         [CanBeNull]
         public IReadOnlyDictionary<string, string> Properties { get; set; }
+
+        public bool HasLogScope => !string.IsNullOrEmpty(Log);
+
+        public bool HasSourceScope => !string.IsNullOrEmpty(Source);
+
+        public bool HasOperationScope => !string.IsNullOrEmpty(Operation);
+
+        public bool HasProperties => Properties != null && Properties.Count > 0;
     }
 }
