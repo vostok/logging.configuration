@@ -1,3 +1,7 @@
+## 1.0.5 (20.04.2020):
+
+Rules with same specificity are now guaranteed to be ordered by decreasing scope length (source, operation).
+
 ## 1.0.4 (22.02.2020):
 
 Implemented https://github.com/vostok/logging.configuration/issues/1

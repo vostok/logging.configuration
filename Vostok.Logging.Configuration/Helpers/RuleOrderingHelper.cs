@@ -12,6 +12,8 @@ namespace Vostok.Logging.Configuration.Helpers
         public static IEnumerable<LogConfigurationRule> Order(IEnumerable<LogConfigurationRule> rules)
             => rules
                 .OrderByDescending(GetSpecificity)
+                .ThenByDescending(rule => rule.Operation?.Length ?? 0)
+                .ThenByDescending(rule => rule.Source?.Length ?? 0)
                 .ThenByDescending(GetPermissiveness);
 
         private static int GetSpecificity(LogConfigurationRule rule)
