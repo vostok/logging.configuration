@@ -22,6 +22,18 @@ namespace Vostok.Logging.Configuration.Tests
         }
 
         [Test]
+        public void Should_order_by_decreasing_scope_length_within_same_specificity()
+        {
+            var rule1 = new LogConfigurationRule { Source = "A.B", MinimumLevel = LogLevel.Debug };
+            var rule2 = new LogConfigurationRule { Source = "A", MinimumLevel = LogLevel.Info };
+            var rule3 = new LogConfigurationRule { Source = "A.B.C", MinimumLevel = LogLevel.Warn};
+
+            RuleOrderingHelper
+                .Order(new[] { rule1, rule2, rule3 })
+                .Should().Equal(rule3, rule1, rule2);
+        }
+
+        [Test]
         public void Should_order_by_decreasing_rule_permissiveness_within_same_specificity()
         {
             var rule1 = new LogConfigurationRule { Enabled = false };
