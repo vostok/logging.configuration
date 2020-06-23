@@ -10,6 +10,7 @@ namespace Vostok.Logging.Configuration.Helpers
     {
         private readonly ILog log;
         private readonly LogConfigurationRule[] rules;
+        private readonly LogConfigurationRule[] enrichingRules;
         private readonly bool enabled;
         private readonly LogLevel minLevel;
 
@@ -18,6 +19,8 @@ namespace Vostok.Logging.Configuration.Helpers
             this.log = log;
             this.rules = RuleOrderingHelper.Order(rules).ToArray();
 
+            enrichingRules = this.rules.Where(rule => rule.HasProperties).ToArray();
+            
             (enabled, minLevel) = Analyze(rules);
         }
 
@@ -26,7 +29,8 @@ namespace Vostok.Logging.Configuration.Helpers
             if (@event == null || !IsEnabledFor(@event.Level) || !CanLog(@event))
                 return;
 
-            Enrich(ref @event);
+            if (enrichingRules.Length > 0)
+                Enrich(ref @event);
 
             log.Log(@event);
         }
@@ -39,14 +43,18 @@ namespace Vostok.Logging.Configuration.Helpers
 
         private bool CanLog(LogEvent @event)
         {
-            var firstMatchingRule = rules.FirstOrDefault(rule => rule.Matches(@event));
-            
-            return firstMatchingRule == null || firstMatchingRule.Allows(@event);
+            foreach (var rule in rules)
+            {
+                if (rule.Matches(@event))
+                    return rule.Allows(@event);
+            }
+
+            return true;
         }
 
         private void Enrich(ref LogEvent @event)
         {
-            foreach (var rule in rules.Where(rule => rule.HasProperties))
+            foreach (var rule in enrichingRules)
             {
                 if (rule.Matches(@event))
                 {

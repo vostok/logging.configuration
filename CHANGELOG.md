@@ -1,3 +1,7 @@
+## 1.0.6 (23.06.2020):
+
+Minor performance optimization.
+
 ## 1.0.5 (20.04.2020):
 
 Rules with same specificity are now guaranteed to be ordered by decreasing scope length (source, operation).
