@@ -17,6 +17,8 @@ notests *default:
 
 full-build > notests:
   deps:
+    - -vostok.devtools
+    - vostok.devtools@with-net6.0
     - vostok.logging.context
   build:
     target: Vostok.Logging.Configuration.sln
