@@ -1,0 +1,35 @@
+Vostok.Logging.Configuration.ConfigurableLog
+Vostok.Logging.Configuration.ConfigurableLog.BaseLogs.get -> System.Collections.Generic.IReadOnlyDictionary<string, Vostok.Logging.Abstractions.ILog>
+Vostok.Logging.Configuration.ConfigurableLog.Dispose() -> void
+Vostok.Logging.Configuration.ConfigurableLog.ForContext(string context) -> Vostok.Logging.Abstractions.ILog
+Vostok.Logging.Configuration.ConfigurableLog.IsEnabledFor(Vostok.Logging.Abstractions.LogLevel level) -> bool
+Vostok.Logging.Configuration.ConfigurableLog.Log(Vostok.Logging.Abstractions.LogEvent event) -> void
+Vostok.Logging.Configuration.ConfigurableLog.OnCompleted() -> void
+Vostok.Logging.Configuration.ConfigurableLog.OnError(System.Exception error) -> void
+Vostok.Logging.Configuration.ConfigurableLog.OnNext(Vostok.Logging.Configuration.LogConfigurationRule[] rules) -> void
+Vostok.Logging.Configuration.ConfigurableLog.WaitForRulesInitialization(System.TimeSpan timeout) -> bool
+Vostok.Logging.Configuration.ConfigurableLogBuilder
+Vostok.Logging.Configuration.ConfigurableLogBuilder.AddLog(string name, Vostok.Logging.Abstractions.ILog log) -> Vostok.Logging.Configuration.ConfigurableLogBuilder
+Vostok.Logging.Configuration.ConfigurableLogBuilder.Build() -> Vostok.Logging.Configuration.ConfigurableLog
+Vostok.Logging.Configuration.ConfigurableLogBuilder.ConfigurableLogBuilder() -> void
+Vostok.Logging.Configuration.ConfigurableLogBuilder.SetRules(System.Func<Vostok.Logging.Configuration.LogConfigurationRule[]> rulesProvider, System.TimeSpan updatePeriod) -> Vostok.Logging.Configuration.ConfigurableLogBuilder
+Vostok.Logging.Configuration.ConfigurableLogBuilder.SetRules(System.IObservable<Vostok.Logging.Configuration.LogConfigurationRule[]> rulesProvider) -> Vostok.Logging.Configuration.ConfigurableLogBuilder
+Vostok.Logging.Configuration.ConfigurableLogBuilder.SetRules(Vostok.Logging.Configuration.LogConfigurationRule[] rules) -> Vostok.Logging.Configuration.ConfigurableLogBuilder
+Vostok.Logging.Configuration.LogConfigurationRule
+Vostok.Logging.Configuration.LogConfigurationRule.Enabled.get -> bool
+Vostok.Logging.Configuration.LogConfigurationRule.Enabled.set -> void
+Vostok.Logging.Configuration.LogConfigurationRule.HasLogScope.get -> bool
+Vostok.Logging.Configuration.LogConfigurationRule.HasOperationScope.get -> bool
+Vostok.Logging.Configuration.LogConfigurationRule.HasProperties.get -> bool
+Vostok.Logging.Configuration.LogConfigurationRule.HasSourceScope.get -> bool
+Vostok.Logging.Configuration.LogConfigurationRule.Log.get -> string
+Vostok.Logging.Configuration.LogConfigurationRule.Log.set -> void
+Vostok.Logging.Configuration.LogConfigurationRule.LogConfigurationRule() -> void
+Vostok.Logging.Configuration.LogConfigurationRule.MinimumLevel.get -> Vostok.Logging.Abstractions.LogLevel?
+Vostok.Logging.Configuration.LogConfigurationRule.MinimumLevel.set -> void
+Vostok.Logging.Configuration.LogConfigurationRule.Operation.get -> string
+Vostok.Logging.Configuration.LogConfigurationRule.Operation.set -> void
+Vostok.Logging.Configuration.LogConfigurationRule.Properties.get -> System.Collections.Generic.IReadOnlyDictionary<string, string>
+Vostok.Logging.Configuration.LogConfigurationRule.Properties.set -> void
+Vostok.Logging.Configuration.LogConfigurationRule.Source.get -> string
+Vostok.Logging.Configuration.LogConfigurationRule.Source.set -> void
