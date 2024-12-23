@@ -12,13 +12,7 @@
     <ProjectReference Include="..\Vostok.Logging.Configuration\Vostok.Logging.Configuration.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Vostok.Logging.Abstractions">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vostok.logging.abstractions\Vostok.Logging.Abstractions\bin\Release\$(ReferencesFramework)\Vostok.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vostok.Logging.Context">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vostok.logging.context\Vostok.Logging.Context\bin\Release\$(ReferencesFramework)\Vostok.Logging.Context.dll</HintPath>
-    </Reference>
+    <ModuleReference Include="vostok.logging.abstractions" />
+    <ModuleReference Include="vostok.logging.context" />
   </ItemGroup>
 </Project>

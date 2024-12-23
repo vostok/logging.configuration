@@ -20,10 +20,7 @@
     <RepositoryUrl>https://github.com/vostok/logging.configuration</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Vostok.Logging.Abstractions">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vostok.logging.abstractions\Vostok.Logging.Abstractions\bin\Release\$(ReferencesFramework)\Vostok.Logging.Abstractions.dll</HintPath>
-    </Reference>
+    <ModuleReference Include="vostok.logging.abstractions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\vostok.commons.helpers\Vostok.Commons.Helpers\Observable\CachingObservable.cs" Link="Commons\CachingObservable.cs" />
