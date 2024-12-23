@@ -8,6 +8,22 @@ notests *default:
   install:
     - Vostok.Logging.Configuration/bin/Release/netstandard2.0/Vostok.Logging.Configuration.dll
     - module vostok.logging.abstractions
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Logging.Configuration/bin/Release/netstandard2.0/Vostok.Logging.Configuration.dll
+          modules:
+            - name: vostok.logging.abstractions
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Logging.Configuration/bin/Release/net6.0/Vostok.Logging.Configuration.dll
+          modules:
+            - name: vostok.logging.abstractions
+        - target-framework: "net8.0"
+          modules:
+            - name: vostok.logging.abstractions
+          libraries:
+            - Vostok.Logging.Configuration/bin/Release/net8.0/Vostok.Logging.Configuration.dll
 
   deps:
     - vostok.commons.helpers/src
@@ -16,6 +32,26 @@ notests *default:
     - vostok.logging.abstractions
 
 full-build > notests:
+  install:
+    - Vostok.Logging.Configuration/bin/Release/netstandard2.0/Vostok.Logging.Configuration.dll
+    - module vostok.logging.abstractions
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Logging.Configuration/bin/Release/netstandard2.0/Vostok.Logging.Configuration.dll
+          modules:
+            - name: vostok.logging.abstractions
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Logging.Configuration/bin/Release/net6.0/Vostok.Logging.Configuration.dll
+          modules:
+            - name: vostok.logging.abstractions
+        - target-framework: "net8.0"
+          modules:
+            - name: vostok.logging.abstractions
+          libraries:
+            - Vostok.Logging.Configuration/bin/Release/net8.0/Vostok.Logging.Configuration.dll
+
   deps:
     - -vostok.devtools
     - vostok.devtools@with-net6.0
